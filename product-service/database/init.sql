@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE INDEX products_name_index ON products (name);
 
 INSERT INTO products (name, description, price, stock) VALUES
+
 ('Laptop kerja 14 inch', 'Laptop ringkas untuk kebutuhan kerja dan kuliah', 8750000.00, 6),
 ('Webcam full HD', 'Kamera full HD untuk rapat dan pembelajaran online', 425000.00, 14),
 ('USB-C hub 6-in-1', 'Hub USB-C dengan HDMI, USB, dan pembaca kartu', 315000.00, 18),
