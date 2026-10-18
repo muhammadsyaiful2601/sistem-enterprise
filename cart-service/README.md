@@ -56,3 +56,64 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Menjalankan API untuk Insomnia
+
+Jalankan seluruh service dari folder utama repository:
+
+```sh
+docker compose up --build -d
+```
+
+Tunggu sampai container `product-service`, `cart-service`, dan kedua database berjalan:
+
+```sh
+docker compose ps
+```
+
+API dapat diakses dari komputer lokal:
+
+- Product Service: `http://localhost:3000`
+- Cart Service: `http://localhost:3001`
+
+Cart Service menghubungi Product Service melalui jaringan Docker di `http://product-service:3000`. Jangan gunakan `localhost:3000` untuk koneksi antarkontainer.
+
+Impor [`insomnia/collection.json`](./insomnia/collection.json) melalui Insomnia: **Import > From File**. Pilih environment **Base Environment**; URL `localhost` dipakai karena Insomnia berjalan di komputer host. Collection menyediakan request health check, melihat produk, dan menguji operasi keranjang.
+
+### Endpoint Cart Service
+
+| Method | Endpoint | Kegunaan |
+| --- | --- | --- |
+| `GET` | `/carts/{userId}` | Melihat isi keranjang user |
+| `POST` | `/carts` | Menambah produk ke keranjang |
+| `PUT` | `/carts/items/{id}` | Mengubah quantity item |
+| `DELETE` | `/carts/items/{id}` | Menghapus satu item |
+| `DELETE` | `/carts/{userId}` | Mengosongkan keranjang user |
+
+### Urutan pengujian
+
+1. `GET http://localhost:3000/health` untuk memastikan Product Service aktif.
+2. `GET http://localhost:3000/products` untuk melihat produk yang tersedia. Database produk baru diisi contoh produk saat pertama kali dibuat.
+3. `POST http://localhost:3001/carts` dengan body JSON:
+
+   ```json
+   {
+     "user_id": 1,
+     "product_id": 1,
+     "quantity": 2
+   }
+   ```
+
+   Gunakan `product_id` yang benar-benar ada dari langkah sebelumnya. Produk valid menghasilkan `201` untuk item baru (atau `200` bila item user/produk itu sudah ada); produk tidak ditemukan menghasilkan `404`.
+4. `GET http://localhost:3001/carts/1` untuk melihat keranjang.
+5. Atur nilai environment `item_id` di Insomnia ke `id` item dari response POST, lalu gunakan `PUT http://localhost:3001/carts/items/{id}` dengan body:
+
+   ```json
+   {
+     "quantity": 3
+   }
+   ```
+
+6. Uji penghapusan melalui `DELETE http://localhost:3001/carts/items/{id}` atau kosongkan semua item milik user dengan `DELETE http://localhost:3001/carts/1`.
+
+Semua request body menggunakan JSON (`Content-Type: application/json`). Untuk menghentikan service tanpa menghapus data database, jalankan `docker compose down` dari folder utama repository.
