@@ -75,6 +75,23 @@ services:
       timeout: 5s
       retries: 5
 
+  order-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: order_service_db
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3308:3306"
+    volumes:
+      - order-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 volumes:
   product-db-data:
   cart-db-data:
+  order-db-data:
