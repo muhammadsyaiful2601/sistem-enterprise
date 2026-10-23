@@ -1,31 +1,49 @@
 <?php
+
 namespace App\Services;
 
-use App\Clients\BusiniessRulesException;
+use App\Exceptions\BusinessRuleException;
 use App\Models\Order;
 
 class OrderQueryService
 {
-    //memeriksa kesehatan layanan
+    // Memeriksa kesehatan layanan
     public function healthCheck()
     {
         return [
-            "status" => "healthy"
+            "status" => "ok",
             "service" => "order-service"
         ];
     }
-    public function getOrderById(id)
+
+    // Mengambil detail pesanan berdasarkan ID
+    public function getOrderById($id)
     {
         $order = Order::with('items')->find($id);
+        
         if (!$order) {
-            throw new BusinessRuleException("Pesanan dengan id {$id} tidak di temukan");
+            throw new BusinessRuleException("Pesanan dengan id {$id} tidak ditemukan");
         }
+
+        return $order;
+    }
+
+    // Simulasi pembayaran pesanan
+    public function payOrder($id)
+    {
+        $order = Order::with('items')->find($id);
+
+        if (!$order) {
+            throw new BusinessRuleException("Pesanan dengan id {$id} tidak ditemukan");
+        }
+
         if ($order->status !== 'PENDING') {
             throw new BusinessRuleException("Pesanan berstatus {$order->status}, hanya pesanan PENDING yang dapat dibayar");
-
-            //ubag status menjadi PAID
-            $order->(['status' => 'PAID'])
-            return $order->fresh('items');
         }
+
+        // Ubah status menjadi PAID
+        $order->update(['status' => 'PAID']);
+
+        return $order->fresh('items');
     }
 }
