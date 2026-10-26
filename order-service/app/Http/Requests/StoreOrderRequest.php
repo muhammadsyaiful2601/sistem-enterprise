@@ -14,16 +14,18 @@ class StoreOrderRequest extends FormRequest
     {
         return false;
     }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'user_id' => 'required|integer',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'user_id.required' => 'Field user_id wajib diisi.',
+            'user_id.integer' => 'Field user_id harus berupa angka.',
         ];
     }
 }

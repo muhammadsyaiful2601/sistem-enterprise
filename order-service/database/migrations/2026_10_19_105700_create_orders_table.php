@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('status')->default('PENDING');
+            $table->decimal('total_amount', 15, 2);
             $table->timestamps();
         });
     }
