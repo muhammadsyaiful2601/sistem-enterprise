@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UserOrdersRequest;
 use App\Services\OrderService;
 use App\Services\OrderQueryService;
 use Illuminate\Http\Request;
@@ -47,8 +48,12 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function userOrders(Request $request, $userId)
+    public function userOrders(UserOrdersRequest $request, $userId)
     {
+        if (!is_numeric($userId)) {
+            return response()->json(['message' => "User dengan id {$userId} tidak ditemukan"], 404);
+        }
+
         $status = $request->query('status');
         $orders = $this->queryService->getOrdersByUser($userId, $status);
 

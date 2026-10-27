@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\BusinessRuleException;
+use App\Exceptions\NotFoundException;
 use App\Models\Order;
 
 class OrderQueryService
@@ -20,12 +21,26 @@ class OrderQueryService
     public function getOrderById($id)
     {
         $order = Order::with('items')->find($id);
-        
+
         if (!$order) {
-            throw new BusinessRuleException("Pesanan dengan id {$id} tidak ditemukan");
+            throw new NotFoundException("Pesanan dengan id {$id} tidak ditemukan");
         }
 
         return $order;
+    }
+
+    // Mengambil daftar pesanan satu user dengan filter status opsional
+    public function getOrdersByUser($userId, $status = null)
+    {
+        $query = Order::with('items')
+            ->where('user_id', $userId)
+            ->orderBy('created_at', 'desc');
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->get();
     }
 
     // Simulasi pembayaran pesanan
@@ -34,7 +49,7 @@ class OrderQueryService
         $order = Order::with('items')->find($id);
 
         if (!$order) {
-            throw new BusinessRuleException("Pesanan dengan id {$id} tidak ditemukan");
+            throw new NotFoundException("Pesanan dengan id {$id} tidak ditemukan");
         }
 
         if ($order->status !== 'PENDING') {

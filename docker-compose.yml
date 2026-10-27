@@ -6,7 +6,6 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # jadi hostname DB harus nama service-nya di network Compose.
       - DB_HOST=product-db
       - DB_USER=appuser
       - DB_PORT=3306
@@ -44,16 +43,33 @@ services:
       product-service:
         condition: service_healthy
 
-  cart-db:
-    image: postgres:16-alpine
+  order-service:
+    build:
+      context: ./order-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
     environment:
-      POSTGRES_DB: cartdb
-      POSTGRES_USER: appuser
-      POSTGRES_PASSWORD: apppassword
-    volumes:
-      - cart-db-data:/var/lib/postgresql/data
+      APP_ENV: local
+      APP_DEBUG: "true"
+      DB_CONNECTION: mysql
+      DB_HOST: order-db
+      DB_PORT: 3306
+      DB_DATABASE: order_service_db
+      DB_USERNAME: appuser
+      DB_PASSWORD: password
+      PRODUCT_SERVICE_URL: http://product-service:3000
+      CART_SERVICE_URL: http://cart-service:3001
+      LOG_CHANNEL: stderr
+    depends_on:
+      order-db:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+      cart-service:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U appuser -d cartdb"]
+      test: ["CMD-SHELL", "curl -f http://localhost:3003/api/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -65,12 +81,25 @@ services:
       MYSQL_USER: appuser
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: rootpassword
-
     volumes:
       - product-db-data:/var/lib/mysql
       - ./product-service/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cart-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cartdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppassword
+    volumes:
+      - cart-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d cartdb"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -91,6 +120,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
 volumes:
   product-db-data:
   cart-db-data:
