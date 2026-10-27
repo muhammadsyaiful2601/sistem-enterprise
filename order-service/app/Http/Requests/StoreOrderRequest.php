@@ -12,7 +12,7 @@ class StoreOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
     public function rules(): array
     {
@@ -27,5 +27,12 @@ class StoreOrderRequest extends FormRequest
             'user_id.required' => 'Field user_id wajib diisi.',
             'user_id.integer' => 'Field user_id harus berupa angka.',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'message' => 'Data yang dikirim tidak valid',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }
