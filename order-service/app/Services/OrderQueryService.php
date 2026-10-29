@@ -29,6 +29,18 @@ class OrderQueryService
         return $order;
     }
 
+    // Mengambil seluruh pesanan dengan filter status opsional
+    public function getAllOrders($status = null)
+    {
+        $query = Order::with('items')->orderBy('created_at', 'desc');
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        return $query->get();
+    }
+
     // Mengambil daftar pesanan satu user dengan filter status opsional
     public function getOrdersByUser($userId, $status = null)
     {

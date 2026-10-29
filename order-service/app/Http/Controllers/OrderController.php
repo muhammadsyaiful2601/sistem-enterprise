@@ -24,6 +24,17 @@ class OrderController extends Controller
         return response()->json($this->queryService->healthCheck(), 200);
     }
 
+    public function index(Request $request)
+    {
+        $status = $request->query('status');
+        $orders = $this->queryService->getAllOrders($status);
+
+        return response()->json([
+            'message' => 'Berhasil mengambil daftar pesanan',
+            'data' => $orders
+        ], 200);
+    }
+
     public function store(StoreOrderRequest $request)
     {
         $order = $this->orderService->checkout($request->user_id);
