@@ -126,7 +126,41 @@ services:
       timeout: 5s
       retries: 5
 
+  review-service:
+    build: ./review-service
+    ports:
+      - "3002:3002"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3002
+      - FLASK_DEBUG=1
+      - MONGO_URI=mongodb://appuser:apppassword@review-db:27017/?authSource=admin
+      - MONGO_DB_NAME=reviewdb
+      - PRODUCT_SERVICE_URL=http://product-service:3000
+    depends_on:
+      review-db:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+
+  review-db:
+    image: mongo:7
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=appuser
+      - MONGO_INITDB_ROOT_PASSWORD=apppassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - review-db-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+      timeout: 5s
+
 volumes:
   product-db-data:
   cart-db-data:
   order-db-data:
+  review-db-data:
