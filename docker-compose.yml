@@ -42,6 +42,11 @@ services:
         condition: service_healthy
       product-service:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "php artisan --version || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   order-service:
     build:
@@ -125,4 +130,3 @@ volumes:
   product-db-data:
   cart-db-data:
   order-db-data:
-  

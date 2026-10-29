@@ -1,6 +1,6 @@
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
-# Install dependencies sistem dan ekstensi PHP yang dibutuhkan (pdo_mysql)
+# Install dependencies sistem dan ekstensi PHP yang dibutuhkan (pdo_mysql & zip)
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libzip-dev \
-    && docker-php-ext-install pdo_mysql zip exts
+    && docker-php-ext-install pdo_mysql zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
