@@ -106,14 +106,5 @@ Repositori ini berisi integrasi arsitektur Microservices untuk toko online yang 
 
 ## 🎬 6. Tautan Video Demo & Commit SHA
 
-- **Link Video Demo**: [https://youtu.be/LINK_DEMO_KAMU](https://youtu.be/LINK_DEMO_KAMU)
+- **Link Video Demo**: (https://drive.google.com/drive/folders/1Ied4ZrWUOlbf0g85Sqzkd26dNNsPW1C4?usp=sharing)
 - **Commit SHA Terakhir**: `<TULIS_SHA_COMMIT_TERAKHIR_DI_SINI>`
-
-### Penanda Waktu (Video Timestamps):
-- `00:00` - Pembukaan, Perkenalan Nama & NIM
-- `01:00` - Penjelasan Arsitektur & Lapisan Kode Order Service
-- `03:00` - Menjalankan Seluruh System via Docker Compose (`docker compose up --build`)
-- `04:00` - Demo Endpoint Skenario Sukses (Checkout, Detail Order, List Order User, Pay)
-- `06:30` - Demo Skenario Gagal (422 Validasi, 409 Stok/Empty Cart, 503 External Service Down)
-- `08:30` - Pembuktian Snapshot Harga & Log Kegagalan
-- `10:00` - Penjelasan Keputusan Desain & Penutup
