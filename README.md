@@ -107,4 +107,4 @@ Repositori ini berisi integrasi arsitektur Microservices untuk toko online yang 
 ## 🎬 6. Tautan Video Demo & Commit SHA
 
 - **Link Video Demo**: (https://drive.google.com/drive/folders/1Ied4ZrWUOlbf0g85Sqzkd26dNNsPW1C4?usp=sharing)
-- **Commit SHA Terakhir**: `<TULIS_SHA_COMMIT_TERAKHIR_DI_SINI>`
+- **Commit SHA Terakhir**: `f9b25fa52998c295d4a3bd17788c32ee6bc7e684`
