@@ -11,7 +11,7 @@ class ProductServiceClient
 
     public function __construct()
     {
-        $this->baseUrl = env('PRODUCT_SERVICE_URL', 'http://product-service:3001');
+        $this->baseUrl = env('PRODUCT_SERVICE_URL', 'http://product-service:3000');
     }
 
     public function getProductById($productId)

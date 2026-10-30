@@ -18,6 +18,15 @@ class CartController extends Controller
     {
     }
 
+    // GET /health
+    public function health()
+    {
+        return response()->json([
+            'status' => 'ok',
+            'service' => 'cart-service'
+        ], 200);
+    }
+
     // GET /carts/{userId}
     public function show(int $userId): JsonResponse
     {

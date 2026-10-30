@@ -38,7 +38,7 @@ class OrderService
             $quantity = $cartItem['quantity'];
 
             // Ambil data produk dari product-service
-            $product = $this->productClient->getProduct($productId);
+            $product = $this->productClient->getProductById($productId);
 
             if (!$product) {
                 throw new BusinessRuleException("Produk dengan ID {$productId} tidak ditemukan di katalog");
@@ -74,7 +74,7 @@ class OrderService
             ]);
 
             foreach ($orderItemsData as $itemData) {
-                $order->items()->create($itemData);
+                $order->orderItems()->create($itemData);
             }
 
             return $order;
@@ -89,6 +89,6 @@ class OrderService
         }
 
         // Muat relasi items untuk ditampilkan pada response
-        return $order->load('items');
+        return $order->load('orderItems');
     }
 }

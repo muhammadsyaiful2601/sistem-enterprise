@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/health', [CartController::class, 'health']);
 Route::get('/carts/{userId}', [CartController::class, 'show'])->whereNumber('userId');
 Route::post('/carts', [CartController::class, 'store']);
 Route::put('/carts/items/{id}', [CartController::class, 'update'])->whereNumber('id');

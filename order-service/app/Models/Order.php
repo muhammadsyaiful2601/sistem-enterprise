@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Models;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Order extends Model
 {
-    use Hasfactory;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -17,6 +17,6 @@ class Order extends Model
 
     public function orderItems()
     {
-        return $this->hashMany(Orderitem::class, 'order_id');
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 }

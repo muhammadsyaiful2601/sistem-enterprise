@@ -11,7 +11,7 @@ class CartServiceClient
 
     public function __construct()
     {
-        $this->baseUrl = env('CART_SERVICE_URL');
+        $this->baseUrl = env('CART_SERVICE_URL', 'http://cart-service:3001');
     }
 
     public function getCart($userId)

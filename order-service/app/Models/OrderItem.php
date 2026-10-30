@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Iluminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
@@ -13,6 +13,7 @@ class OrderItem extends Model
         'order_id',
         'product_id',
         'product_name',
+        'unit_price',
         'quantity',
         'subtotal',
     ];

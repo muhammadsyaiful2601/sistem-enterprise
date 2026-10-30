@@ -20,7 +20,7 @@ class OrderQueryService
     // Mengambil detail pesanan berdasarkan ID
     public function getOrderById($id)
     {
-        $order = Order::with('items')->find($id);
+        $order = Order::with('orderItems')->find($id);
 
         if (!$order) {
             throw new NotFoundException("Pesanan dengan id {$id} tidak ditemukan");
@@ -32,7 +32,7 @@ class OrderQueryService
     // Mengambil seluruh pesanan dengan filter status opsional
     public function getAllOrders($status = null)
     {
-        $query = Order::with('items')->orderBy('created_at', 'desc');
+        $query = Order::with('orderItems')->orderBy('created_at', 'desc');
 
         if ($status) {
             $query->where('status', $status);
@@ -44,7 +44,7 @@ class OrderQueryService
     // Mengambil daftar pesanan satu user dengan filter status opsional
     public function getOrdersByUser($userId, $status = null)
     {
-        $query = Order::with('items')
+        $query = Order::with('orderItems')
             ->where('user_id', $userId)
             ->orderBy('created_at', 'desc');
 
@@ -58,7 +58,7 @@ class OrderQueryService
     // Simulasi pembayaran pesanan
     public function payOrder($id)
     {
-        $order = Order::with('items')->find($id);
+        $order = Order::with('orderItems')->find($id);
 
         if (!$order) {
             throw new NotFoundException("Pesanan dengan id {$id} tidak ditemukan");
@@ -71,6 +71,6 @@ class OrderQueryService
         // Ubah status menjadi PAID
         $order->update(['status' => 'PAID']);
 
-        return $order->fresh('items');
+        return $order->fresh('orderItems');
     }
 }
