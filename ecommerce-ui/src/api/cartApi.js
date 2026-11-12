@@ -2,7 +2,9 @@
 // Client untuk cart-service.
 import { request } from './http'
 
-const BASE_URL = import.meta.env.VITE_CART_URL
+const BASE_URL = import.meta.env.DEV
+  ? '/__services/cart'
+  : import.meta.env.VITE_CART_URL
 
 export const getCart = (userId) => 
   request(BASE_URL, `/carts/${userId}`).then((res) => res.data)

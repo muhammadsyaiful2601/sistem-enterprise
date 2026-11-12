@@ -27,9 +27,10 @@ export default function ReviewForm({ productId, userId, onCreated }) {
   }
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <h3>Tulis review sebagai user {userId}</h3>
-      <label>
+    <form className="form review-form" onSubmit={handleSubmit}>
+      <h3>Tulis ulasan</h3>
+      <p className="muted">Berbagi sebagai user {userId}</p>
+      <label className="form-field">
         Rating
         <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
           {[5, 4, 3, 2, 1].map((n) => (
@@ -39,7 +40,7 @@ export default function ReviewForm({ productId, userId, onCreated }) {
           ))}
         </select>
       </label>
-      <label>
+      <label className="form-field">
         Komentar
         <textarea
           rows="3"

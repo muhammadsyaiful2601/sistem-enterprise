@@ -2,7 +2,9 @@
 // Client untuk product-service. Alamat dibaca dari file .env.
 import { request } from './http'
 
-const BASE_URL = import.meta.env.VITE_PRODUCT_URL
+const BASE_URL = import.meta.env.DEV
+  ? '/__services/product'
+  : import.meta.env.VITE_PRODUCT_URL
 
 export const getProducts = () => 
   request(BASE_URL, '/products').then((res) => res.data)
